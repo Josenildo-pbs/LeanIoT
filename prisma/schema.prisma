@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Define the data model for Users
+model User {
+  user_id    Int      @id @default(autoincrement())
+  username   String   @unique
+  email      String   @unique
+  password   String
+  is_admin   Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  // Define the relation to User_Devices table
+  devices       User_Device[]
+  DeviceMessage DeviceMessage[]
+}
+
+// Define the data model for Devices
+model Device {
+  device_id   Int      @id @default(autoincrement())
+  device_name String
+  mac_address String   @unique
+  device_type String
+  created_at  DateTime @default(now())
+
+  // Define the relation to User_Devices table
+  users User_Device[]
+
+  // Define the relation to DeviceMessage table
+  messages DeviceMessage[]
+}
+
+// Define the junction table for the many-to-many relationship between User and Device
+model User_Device {
+  user_id   Int
+  device_id Int
+  is_admin  Boolean @default(false)
+
+  // Define foreign keys
+  user   User   @relation(fields: [user_id], references: [user_id])
+  device Device @relation(fields: [device_id], references: [device_id])
+
+  // Define primary key
+  @@id([user_id, device_id])
+}
+
+// Define the data model for Device Messages
+model DeviceMessage {
+  message_id Int      @id @default(autoincrement())
+  device_id  Int
+  user_id    Int
+  message    String
+  timestamp  DateTime @default(now())
+
+  // Define foreign keys
+  device Device @relation(fields: [device_id], references: [device_id])
+  user   User   @relation(fields: [user_id], references: [user_id])
+}
