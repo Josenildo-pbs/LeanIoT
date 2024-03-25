@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { DeviceModule } from './device/device.module';
 import { TokenModule } from './token/token.module';
+import { MqttResponseGateway } from './gateways/mqttresponse.gateway';
 import { MqttClientModule } from './mqttClient/mqttclient.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
@@ -46,6 +47,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
   ],
   controllers: [AppController],
   providers: [
+        MqttResponseGateway, 
     AppService,
     {
       provide: APP_GUARD,

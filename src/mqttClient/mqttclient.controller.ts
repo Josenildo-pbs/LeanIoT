@@ -1,26 +1,29 @@
-import { Controller, Post, Body , UseGuards, Inject} from '@nestjs/common';
-import {MessagePattern, Payload, Ctx, MqttContext, ClientMqtt} from '@nestjs/microservices'
+import { Controller, Get, Body , UseGuards, Req, Param, ParseIntPipe} from '@nestjs/common';
+import {MessagePattern, Payload, Ctx, MqttContext} from '@nestjs/microservices'
 import {MqttClientService} from './mqttclient.service'
 import { AuthGuard } from 'src/guards/auth.guard';
-import { emit } from 'process';
 
 @Controller('broker')
 export class MqttClientController {
     constructor(
-        private readonly mqttClientService: MqttClientService,
-        @Inject('MQTT_SERVICE') private client : ClientMqtt,
+        private readonly mqtt: MqttClientService,
         ) {}
 
     @UseGuards(AuthGuard)
-    @Post('send')
-    async sendMessage(@Body() data: { topic: string, message: string }) {
-        return  this.client.emit(data.topic, data.message)
+    @Get('send/:id')
+    async sendMessage(@Body() data: { message: string }, @Req() req, @Param('id', ParseIntPipe) device_id: number) {
+        const user_id =  req.tokenPayload.id
+        return  this.mqtt.send(user_id, device_id, data.message)
   }
 
-    @MessagePattern('/devices')
+    @MessagePattern('/devices/#')
     getNotifications(@Payload() data: number[], @Ctx() context: MqttContext) {
         console.log(`Received data: ${data}`);
         console.log(`Topic: ${context.getTopic()}`);
+        const topic = context.getTopic();
+        const element = topic.split('/');
+        const macAddress =  element[element.length-1]
+        this.mqtt. sendSocket(macAddress, data.toString())
     // Add your message handling logic here
     }
 }

@@ -1,10 +1,11 @@
-
 import { Module } from '@nestjs/common';
 import { MqttClientService } from './mqttclient.service'; 
 import { MqttClientController } from './mqttclient.controller';
 import {Transport, ClientsModule} from '@nestjs/microservices'
 import { TokenService } from 'src/token/token.service';
 import { TokenModule } from 'src/token/token.module';
+import { PrismaModule } from 'src/prisma/prisma.module';
+import {MqttResponseGateway} from '../gateways/mqttresponse.gateway'
 
 @Module({
     imports: [ClientsModule.register([
@@ -20,8 +21,8 @@ import { TokenModule } from 'src/token/token.module';
             reconnectPeriod: 1000,
           },
         },
-      ]),TokenModule],
+      ]),TokenModule, PrismaModule],
     controllers: [MqttClientController],
-    providers: [MqttClientService,TokenService ],
+    providers: [MqttClientService,TokenService, MqttResponseGateway],
 })
 export class MqttClientModule {}

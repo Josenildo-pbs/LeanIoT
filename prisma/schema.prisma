@@ -18,7 +18,7 @@ model User {
 
   // Define the relation to User_Devices table
   devices       User_Device[]
-  DeviceMessage DeviceMessage[]
+  UserMessage UserMessage[]
 }
 
 // Define the data model for Devices
@@ -33,7 +33,8 @@ model Device {
   users User_Device[]
 
   // Define the relation to DeviceMessage table
-  messages DeviceMessage[]
+  DeviceMessage DeviceMessage[]
+  UserMessage UserMessage[]
 }
 
 // Define the junction table for the many-to-many relationship between User and Device
@@ -51,7 +52,7 @@ model User_Device {
 }
 
 // Define the data model for Device Messages
-model DeviceMessage {
+model UserMessage {
   message_id Int      @id @default(autoincrement())
   device_id  Int
   user_id    Int
@@ -61,4 +62,14 @@ model DeviceMessage {
   // Define foreign keys
   device Device @relation(fields: [device_id], references: [device_id])
   user   User   @relation(fields: [user_id], references: [user_id])
+}
+
+model DeviceMessage {
+  message_id Int      @id @default(autoincrement())
+  device_id  Int
+  message    String
+  timestamp  DateTime @default(now())
+
+  // Define foreign keys
+  device Device @relation(fields: [device_id], references: [device_id])
 }
