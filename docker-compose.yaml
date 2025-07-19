@@ -22,7 +22,7 @@ services:
     volumes:
       - data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=Maniaco10
+      - POSTGRES_PASSWORD=<your_password>
       - POSTGRES_USER=js_server
     command: -p 49154
 
