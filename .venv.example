@@ -1,0 +1,14 @@
+# PostgreSQL Database Configuration
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+POSTGRES_PORT=
+POSTGRES_DB=
+DATABASE_URL=postgresql://your_user:your_password@db:49154/your_database_name
+
+# MQTT Broker Authentication
+MQTT_USERNAME=
+MQTT_PASSWORD=
+
+# JWT Configuration
+JWT_SECRET=
+SALT_ROUNDS=

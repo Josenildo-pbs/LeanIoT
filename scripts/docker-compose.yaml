@@ -1,0 +1,45 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: leanIot_server
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+      - mqtt
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+
+  db:
+    image: postgres:latest
+    container_name: leanIot_db
+    restart: always
+    ports:
+      - 49154:49154
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    command: -p 49154
+
+  mqtt:
+    image: eclipse-mosquitto:2.0
+    container_name: leanIot_mqtt
+    restart: always
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+    # No need for environment vars here; config is file-based
+
+volumes:
+  postgres_data:

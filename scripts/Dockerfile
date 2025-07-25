@@ -1,10 +1,10 @@
-FROM node:18.18.0
+FROM node:20
 
 RUN mkdir -p /home/js_server
 
 WORKDIR  /home/js_server
 
-COPY  . .
+COPY  ../ .
 
 EXPOSE 3000
 
