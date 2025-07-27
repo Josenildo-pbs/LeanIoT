@@ -13,6 +13,7 @@ import {MqttResponseGateway} from '../gateways/mqttresponse.gateway'
           name: 'MQTT_SERVICE',
           transport: Transport.MQTT,
           options: {
+            url: process.env.MQTT_URL || 'mqtt://localhost:1883',
             clientId: `mqtt_${Math.random().toString(16).slice(3)}`,
             clean: true,
             connectTimeout: 4000,
