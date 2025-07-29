@@ -17,7 +17,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env', // optional if it's at project root
+      envFilePath: '.env',
     }),
     MqttClientModule,
     DeviceModule,
